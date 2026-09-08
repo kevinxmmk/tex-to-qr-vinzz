@@ -1,91 +1,49 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Costume QR Code by Vinzz</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <title>Vinzzkedce - Text to QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --primary: #ff0055;
-            --primary-glow: rgba(255, 0, 85, 0.4);
-            --secondary: #7928ca;
-            --bg-dark: #0a0a0c;
-            --card-bg: rgba(22, 22, 29, 0.75);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-muted: #a1a1aa;
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px 15px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .background-decor {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .circle-1 {
-            position: absolute;
-            top: -10%;
-            left: -10%;
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, var(--primary) 0%, rgba(0,0,0,0) 70%);
-            opacity: 0.3;
-            filter: blur(60px);
-        }
-
-        .circle-2 {
-            position: absolute;
-            bottom: -10%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, var(--secondary) 0%, rgba(0,0,0,0) 70%);
-            opacity: 0.35;
-            filter: blur(60px);
+            padding: 40px 20px;
         }
 
         .container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 850px;
-        }
-
-        .card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 35px 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .header {
@@ -93,304 +51,329 @@
             margin-bottom: 30px;
         }
 
-        .brand-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px auto;
-            box-shadow: 0 8px 25px var(--primary-glow);
-            font-size: 26px;
-        }
-
         h1 {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 6px;
-            background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         p.subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
+            color: var(--text-sub);
+            font-size: 0.95rem;
         }
 
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
+        .input-group {
             margin-bottom: 18px;
+            text-align: left;
         }
 
         label {
             display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-sub);
             margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        input[type="text"], select {
+        input[type="text"] {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            border: 1px solid var(--border-color);
-            background: rgba(10, 10, 12, 0.6);
             color: #fff;
-            font-size: 14px;
+            font-size: 0.95rem;
             outline: none;
             transition: all 0.3s ease;
         }
 
-        input[type="text"]:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 12px var(--primary-glow);
+        input[type="text"]:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
         }
 
-        .color-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .controls {
+            display: flex;
             gap: 12px;
+            margin-bottom: 24px;
         }
 
-        .color-box {
+        .control-item {
+            flex: 1;
+            text-align: left;
+        }
+
+        .color-picker-wrapper {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(10, 10, 12, 0.6);
-            border: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 8px 12px;
             border-radius: 12px;
         }
 
         input[type="color"] {
+            -webkit-appearance: none;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             cursor: pointer;
             background: none;
         }
 
-        .preview-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(10, 10, 12, 0.4);
-            border: 1px dashed var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
         }
 
-        #canvas-container {
-            background: #ffffff;
-            padding: 12px;
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        .qr-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 24px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            min-height: 220px;
+            margin-bottom: 30px;
+        }
+
+        #qrcode {
+            padding: 12px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        #qrcode img {
+            display: block;
+        }
+
+        .qr-desc {
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+            max-width: 90%;
+            text-align: center;
+            word-break: break-word;
         }
 
         .btn-download {
             width: 100%;
             padding: 14px;
-            border-radius: 12px;
             border: none;
-            background: linear-gradient(135deg, var(--primary), #e0004c);
+            border-radius: 12px;
+            background: var(--accent-gradient);
             color: #fff;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 6px 20px var(--primary-glow);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+            margin-bottom: 40px;
         }
 
         .btn-download:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 0, 85, 0.6);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
         }
 
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding-top: 20px;
-            margin-top: 25px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-muted);
+        .info-section {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+            text-align: left;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        footer strong {
+        .info-section p {
+            margin-bottom: 20px;
+        }
+
+        .info-section h3 {
             color: var(--text-main);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .info-section ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 12px;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+            margin-top: 6px;
+        }
+
+        .info-section ul li {
+            margin-bottom: 4px;
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            text-align: center;
+            color: var(--text-sub);
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="background-decor">
-    <div class="circle-1"></div>
-    <div class="circle-2"></div>
-</div>
-
-<div class="container">
-    <div class="card">
+    <div class="container">
         <div class="header">
-            <div class="brand-logo">
-                <i class="fa-solid fa-qrcode"></i>
-            </div>
-            <h1>Costume QR Code by Vinzz</h1>
-            <p class="subtitle">Buat QR Code unik dengan gaya, warna & logo kustom</p>
+            <h1>Vinzzkedce QR Generator</h1>
+            <p class="subtitle">Ubah teks atau URL menjadi QR Code estetik dengan mudah &amp; gratis</p>
         </div>
 
-        <div class="grid-layout">
-            <div class="controls">
-                <div class="form-group">
-                    <label><i class="fa-solid fa-link"></i> Isi Teks / Link URL</label>
-                    <input type="text" id="qrText" value="https://google.com" placeholder="Masukkan URL atau teks..." oninput="updateQR()">
-                </div>
+        <div class="input-group">
+            <label for="text-input">Teks atau URL</label>
+            <input type="text" id="text-input" placeholder="Masukkan link atau teks di sini..." value="https://instagram.com">
+        </div>
 
-                <div class="form-group">
-                    <label><i class="fa-solid fa-palette"></i> Warna QR & Background</label>
-                    <div class="color-inputs">
-                        <div class="color-box">
-                            <input type="color" id="qrColor" value="#ff0055" onchange="updateQR()">
-                            <span style="font-size: 12px; color: var(--text-muted);">Titik QR</span>
-                        </div>
-                        <div class="color-box">
-                            <input type="color" id="bgColor" value="#ffffff" onchange="updateQR()">
-                            <span style="font-size: 12px; color: var(--text-muted);">Background</span>
-                        </div>
-                    </div>
-                </div>
+        <div class="input-group">
+            <label for="desc-input">Deskripsi Singkat / Keterangan</label>
+            <input type="text" id="desc-input" placeholder="Contoh: Scan untuk membuka profil Instagram" value="Scan untuk membuka profil Instagram">
+        </div>
 
-                <div class="form-group">
-                    <label><i class="fa-solid fa-shapes"></i> Bentuk Titik QR</label>
-                    <select id="dotsStyle" onchange="updateQR()">
-                        <option value="square">Kotak (Klasik)</option>
-                        <option value="dots">Bintik-bintik (Dots)</option>
-                        <option value="rounded" selected>Membulat (Rounded)</option>
-                        <option value="classy">Classy</option>
-                        <option value="extra-rounded">Extra Membulat</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fa-solid fa-border-top-left"></i> Bentuk Sudut (Corner Eyes)</label>
-                    <select id="cornersStyle" onchange="updateQR()">
-                        <option value="square">Kotak</option>
-                        <option value="dot">Titik (Dot)</option>
-                        <option value="extra-rounded" selected>Membulat (Rounded)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fa-solid fa-image"></i> Gambar Logo Tengah</label>
-                    <input type="file" id="logoInput" accept="image/*" onchange="handleLogoUpload(event)">
+        <div class="controls">
+            <div class="control-item">
+                <label>Warna QR</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="dark-color" value="#0f172a">
                 </div>
             </div>
-
-            <div class="preview-box">
-                <div id="canvas-container"></div>
-                <button class="btn-download" onclick="downloadQR()">
-                    <i class="fa-solid fa-download"></i> Unduh Gambar QR
-                </button>
+            <div class="control-item">
+                <label>Background</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="light-color" value="#ffffff">
+                </div>
             </div>
         </div>
 
-        <footer>
-            Web ini dibuat oleh <strong>vinzz kedce</strong>
-        </footer>
+        <div class="qr-wrapper">
+            <div id="qrcode"></div>
+            <p class="qr-desc" id="qr-desc-text">Scan untuk membuka profil Instagram</p>
+        </div>
+
+        <button class="btn-download" onclick="downloadQR()">Unduh QR Code</button>
+
+        <div class="info-section">
+            <p><strong>Vinzzkedce QR Generator</strong> adalah cara termudah untuk mengonversi teks, tautan URL, atau data string menjadi gambar QR Code dan mengunduhnya ke perangkat Anda. Layanan ini gratis dan tidak memerlukan pendaftaran atau langganan. Dioptimalkan untuk berjalan di semua jenis perangkat, seperti komputer, tablet, dan ponsel—satu-satunya syarat adalah browser web modern.</p>
+
+            <h3>Cara membuat dan mengunduh QR Code:</h3>
+            <ol>
+                <li>
+                    Masukkan teks atau URL yang ingin Anda ubah pada kolom <strong>Teks atau URL</strong>.
+                </li>
+                <li>
+                    Atur kustomisasi sesuai keinginan:
+                    <ul>
+                        <li>Tambahkan deskripsi singkat di bawah QR Code.</li>
+                        <li>Pilih warna pola QR Code dan warna latar belakang.</li>
+                    </ul>
+                </li>
+                <li>
+                    Klik tombol <strong>Unduh QR Code</strong>. Hasil QR Code akan langsung diekstrak dan disimpan ke perangkat Anda secara instan dalam format gambar PNG.
+                </li>
+            </ol>
+
+            <p class="footer-note">Terima kasih telah menggunakan layanan Vinzzkedce QR Generator kami.</p>
+        </div>
     </div>
-</div>
 
-<script>
-let logoUrl = "";
+    <script>
+        const textInput = document.getElementById('text-input');
+        const descInput = document.getElementById('desc-input');
+        const qrDescText = document.getElementById('qr-desc-text');
+        const darkColorInput = document.getElementById('dark-color');
+        const lightColorInput = document.getElementById('light-color');
+        const qrContainer = document.getElementById('qrcode');
 
-const qrCode = new QRCodeStyling({
-    width: 220,
-    height: 220,
-    type: "canvas",
-    data: "https://google.com",
-    image: "",
-    dotsOptions: {
-        color: "#ff0055",
-        type: "rounded"
-    },
-    backgroundOptions: {
-        color: "#ffffff",
-    },
-    cornersSquareOptions: {
-        color: "#ff0055",
-        type: "extra-rounded"
-    },
-    imageOptions: {
-        crossOrigin: "anonymous",
-        margin: 4,
-        imageSize: 0.3
-    }
-});
+        let qrcode = new QRCode(qrContainer, {
+            text: textInput.value,
+            width: 180,
+            height: 180,
+            colorDark: darkColorInput.value,
+            colorLight: lightColorInput.value,
+            correctLevel: QRCode.CorrectLevel.H
+        });
 
-qrCode.append(document.getElementById("canvas-container"));
-
-function updateQR() {
-    const text = document.getElementById("qrText").value.trim() || "https://google.com";
-    const qrColor = document.getElementById("qrColor").value;
-    const bgColor = document.getElementById("bgColor").value;
-    const dotsStyle = document.getElementById("dotsStyle").value;
-    const cornersStyle = document.getElementById("cornersStyle").value;
-
-    qrCode.update({
-        data: text,
-        image: logoUrl,
-        dotsOptions: {
-            color: qrColor,
-            type: dotsStyle
-        },
-        backgroundOptions: {
-            color: bgColor,
-        },
-        cornersSquareOptions: {
-            color: qrColor,
-            type: cornersStyle
+        function updateQR() {
+            qrContainer.innerHTML = "";
+            qrcode = new QRCode(qrContainer, {
+                text: textInput.value || " ",
+                width: 180,
+                height: 180,
+                colorDark: darkColorInput.value,
+                colorLight: lightColorInput.value,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            qrContainer.style.backgroundColor = lightColorInput.value;
+            qrDescText.textContent = descInput.value || "";
         }
-    });
-}
 
-function handleLogoUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            logoUrl = e.target.result;
-            updateQR();
-        };
-        reader.readAsDataURL(file);
-    }
-}
+        textInput.addEventListener('input', updateQR);
+        descInput.addEventListener('input', updateQR);
+        darkColorInput.addEventListener('input', updateQR);
+        lightColorInput.addEventListener('input', updateQR);
 
-function downloadQR() {
-    qrCode.download({ name: "qrcode-vinzz", extension: "png" });
-}
-</script>
+        function downloadQR() {
+            const qrImg = qrContainer.querySelector('img');
+            if (!qrImg || !qrImg.src) return;
 
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const padding = 20;
+            const qrSize = 180;
+            const desc = descInput.value;
+
+            canvas.width = qrSize + (padding * 2);
+            canvas.height = qrSize + (padding * 2) + (desc ? 40 : 0);
+
+            ctx.fillStyle = lightColorInput.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                ctx.drawImage(img, padding, padding, qrSize, qrSize);
+
+                if (desc) {
+                    ctx.fillStyle = darkColorInput.value;
+                    ctx.font = '14px "Segoe UI", sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(desc, canvas.width / 2, qrSize + padding + 25);
+                }
+
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'qrcode-vinzzkedce.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            img.src = qrImg.src;
+        }
+    </script>
 </body>
 </html>
