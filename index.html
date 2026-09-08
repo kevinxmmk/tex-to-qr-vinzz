@@ -308,14 +308,7 @@
         const lightColorInput = document.getElementById('light-color');
         const qrContainer = document.getElementById('qrcode');
 
-        let qrcode = new QRCode(qrContainer, {
-            text: textInput.value,
-            width: 180,
-            height: 180,
-            colorDark: darkColorInput.value,
-            colorLight: lightColorInput.value,
-            correctLevel: QRCode.CorrectLevel.H
-        });
+        let qrcode;
 
         function updateQR() {
             qrContainer.innerHTML = "";
@@ -332,47 +325,58 @@
             qrDescText.textContent = descInput.value || "";
         }
 
+        updateQR();
+
         textInput.addEventListener('input', updateQR);
         descInput.addEventListener('input', updateQR);
         darkColorInput.addEventListener('input', updateQR);
         lightColorInput.addEventListener('input', updateQR);
 
         function downloadQR() {
-            const qrImg = qrContainer.querySelector('img');
-            if (!qrImg || !qrImg.src) return;
+            const canvas = qrContainer.querySelector('canvas');
+            const img = qrContainer.querySelector('img');
 
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+            if (!canvas && !img) {
+                alert('QR Code belum siap!');
+                return;
+            }
+
+            const exportCanvas = document.createElement('canvas');
+            const ctx = exportCanvas.getContext('2d');
             const padding = 20;
             const qrSize = 180;
             const desc = descInput.value;
 
-            canvas.width = qrSize + (padding * 2);
-            canvas.height = qrSize + (padding * 2) + (desc ? 40 : 0);
+            exportCanvas.width = qrSize + (padding * 2);
+            exportCanvas.height = qrSize + (padding * 2) + (desc ? 40 : 0);
 
             ctx.fillStyle = lightColorInput.value;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
 
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = function() {
-                ctx.drawImage(img, padding, padding, qrSize, qrSize);
+            const sourceImage = new Image();
+            sourceImage.onload = function() {
+                ctx.drawImage(sourceImage, padding, padding, qrSize, qrSize);
 
                 if (desc) {
                     ctx.fillStyle = darkColorInput.value;
                     ctx.font = '14px "Segoe UI", sans-serif';
                     ctx.textAlign = 'center';
-                    ctx.fillText(desc, canvas.width / 2, qrSize + padding + 25);
+                    ctx.fillText(desc, exportCanvas.width / 2, qrSize + padding + 25);
                 }
 
                 const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
                 link.download = 'qrcode-vinzzkedce.png';
+                link.href = exportCanvas.toDataURL('image/png');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             };
-            img.src = qrImg.src;
+
+            if (canvas) {
+                sourceImage.src = canvas.toDataURL('image/png');
+            } else if (img) {
+                sourceImage.src = img.src;
+            }
         }
     </script>
 </body>
