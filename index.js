@@ -1,5 +1,3 @@
-// tempek
-
 document.getElementById('generate-btn').addEventListener('click', function() {
     const text = document.getElementById('qr-input').value;
     const qrcodeContainer = document.getElementById('qrcode');
@@ -11,6 +9,7 @@ document.getElementById('generate-btn').addEventListener('click', function() {
     
     qrcodeContainer.innerHTML = '';
     
+    // Generate QR Code
     new QRCode(qrcodeContainer, {
         text: text,
         width: 200,
@@ -19,11 +18,22 @@ document.getElementById('generate-btn').addEventListener('click', function() {
 });
 
 document.getElementById('download-btn').addEventListener('click', function() {
-    const qrImage = document.querySelector('#qrcode img');
-    
-    if (qrImage && qrImage.src) {
+    const container = document.getElementById('qrcode');
+    const canvas = container.querySelector('canvas');
+    const img = container.querySelector('img');
+
+    let imageSrc = '';
+
+    // Ambil data gambar dari Canvas atau Img (mana yang tersedia)
+    if (canvas) {
+        imageSrc = canvas.toDataURL('image/png');
+    } else if (img && img.src) {
+        imageSrc = img.src;
+    }
+
+    if (imageSrc) {
         const link = document.createElement('a');
-        link.href = qrImage.src;
+        link.href = imageSrc;
         link.download = 'qrcode.png';
         document.body.appendChild(link);
         link.click();
